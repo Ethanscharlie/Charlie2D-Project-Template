@@ -1,0 +1,3 @@
+/home/ethanscharlie/Projects/Code/C++/CharlieGamesv3/Charlie2D-Project-Template/build/CMakeFiles/index.dir
+/home/ethanscharlie/Projects/Code/C++/CharlieGamesv3/Charlie2D-Project-Template/build/CMakeFiles/edit_cache.dir
+/home/ethanscharlie/Projects/Code/C++/CharlieGamesv3/Charlie2D-Project-Template/build/CMakeFiles/rebuild_cache.dir
