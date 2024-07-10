@@ -8,3 +8,5 @@
  */
 
 #pragma once
+#include "config.h"
+#include "components.h"
