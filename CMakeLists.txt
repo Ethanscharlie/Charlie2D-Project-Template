@@ -22,12 +22,10 @@ target_include_directories(index PUBLIC
     ${PROJECT_SOURCE_DIR}/src
 )
 
-# if (LINUX OR EMSCRIPTEN)
+if (LINUX)
   set(SDL_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/linux/SDL2")
   set(CH2D_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/linux/charlie2D")
-  # set(CH2D_LIB_PATH "/home/ethanscharlie/Projects/Code/Github/charlie2d/build")
-
-# endif()
+endif()
 
 find_library(SDL2_      SDL2       PATHS ${SDL_LIB_PATH})
 find_library(SDL2_MAIN  SDL2main   PATHS ${SDL_LIB_PATH})
@@ -50,12 +48,7 @@ if (LINUX)
   )
 elseif(EMSCRIPTEN)
   target_link_libraries(index
-    # ${SDL2_MAIN}
-    ${SDL2_}
-    ${SDL2_TTF}
-    # ${SDL2_MIXER}
-    # ${SDL2_GFX}
-    # ${CHARLIE2D}
+    "${PROJECT_SOURCE_DIR}/lib/emscripten/charlie2D/libcharlie2D.a"
   )
 
   # Enable Emscripten-specific flags
@@ -66,6 +59,7 @@ elseif(EMSCRIPTEN)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s SDL2_IMAGE_FORMATS=['png']")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL_TTF=2")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL_MIXER=2")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_SDL_GFX=2")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s WASM=0")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s EXPORTED_FUNCTIONS=\"['_main', '_on_resize']\"")
