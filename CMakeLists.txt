@@ -17,8 +17,11 @@ add_executable(index
 # add include directories
 target_include_directories(index PUBLIC
     ${PROJECT_SOURCE_DIR}/include/SDL2 
+    ${PROJECT_SOURCE_DIR}/include/imgui 
     ${PROJECT_SOURCE_DIR}/include 
-    ${PROJECT_SOURCE_DIR}/include/charlie2D 
+    ${PROJECT_SOURCE_DIR}/include/core 
+    ${PROJECT_SOURCE_DIR}/include/components
+    ${PROJECT_SOURCE_DIR}/include 
     ${PROJECT_SOURCE_DIR}/src
 )
 
