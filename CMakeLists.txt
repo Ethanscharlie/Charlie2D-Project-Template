@@ -20,8 +20,7 @@ target_include_directories(index PUBLIC
 )
 elseif (WIN32)
 target_include_directories(index PUBLIC 
-  # ${PROJECT_SOURCE_DIR}/include/SDL2win
-  set(sdl2_include_path "/usr/x86_64-w64-mingw32/include/SDL2")
+  ${PROJECT_SOURCE_DIR}/include/SDL2win
 )
 endif()
 
@@ -38,8 +37,7 @@ if (LINUX)
   set(SDL_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/linux/SDL2")
   set(CH2D_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/linux/charlie2D")
 elseif (WIN32)
-  # set(SDL_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows/SDL2")
-  set(SDL_LIB_PATH "/usr/x86_64-w64-mingw32/lib")
+  set(SDL_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows/SDL2")
   set(CH2D_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows/charlie2D")
 endif()
 
