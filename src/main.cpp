@@ -18,7 +18,7 @@
  * LDTK::loadLevel("65ba8250-25d0-11ef-b0ef-03acbc99fa7b");
 */
 
-int main() {
+int main(int, char **) {
   GameManager::init();
 
 
