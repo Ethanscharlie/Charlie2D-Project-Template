@@ -19,6 +19,8 @@ make
 ./index
 ```
 ## Windows
+Download and install Cmake ([Downloads](https://cmake.org/download/))
+
 Download and install the Mingw Compiler for 
 x86_64 ([Downloads](https://github.com/niXman/mingw-builds-binaries/releases))
 
