@@ -1,7 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
+# ----------- User Set Vars ------------
+set (PROJECT_NAME "index")
+# ----------- User Set Vars ------------
+
 # set the project name
-project(index)
+project(${PROJECT_NAME})
 
 # set the C++ standard to C++11
 set(CMAKE_CXX_STANDARD 20)
@@ -9,23 +13,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 file(GLOB_RECURSE SOURCE_FILES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
-add_executable(index
+add_executable(${PROJECT_NAME}
   src/main.cpp
   ${SOURCE_FILES}
 )
 
 if (LINUX)
-target_include_directories(index PUBLIC 
+target_include_directories(${PROJECT_NAME} PUBLIC 
   ${PROJECT_SOURCE_DIR}/include/SDL2
 )
 elseif (WIN32)
-target_include_directories(index PUBLIC 
+target_include_directories(${PROJECT_NAME} PUBLIC 
   ${PROJECT_SOURCE_DIR}/include/SDL2win
 )
 endif()
 
 # add include directories
-target_include_directories(index PUBLIC
+target_include_directories(${PROJECT_NAME} PUBLIC
     ${PROJECT_SOURCE_DIR}/include/imgui 
     ${PROJECT_SOURCE_DIR}/include 
     ${PROJECT_SOURCE_DIR}/include/core 
@@ -51,7 +55,7 @@ find_library(SDL2_GFX SDL2_gfx PATHS ${SDL_LIB_PATH})
 find_library(CHARLIE2D charlie2D PATHS ${CH2D_LIB_PATH})
 
 if (LINUX)
-  target_link_libraries(index
+  target_link_libraries(${PROJECT_NAME}
     ${SDL2_MAIN}
     ${SDL2_}
     ${SDL2_TTF}
@@ -69,7 +73,7 @@ if (LINUX)
   file(COPY ${CHARLIE2D} DESTINATION ${CMAKE_BINARY_DIR})
 
 elseif (WIN32)
-  target_link_libraries(index
+  target_link_libraries(${PROJECT_NAME}
     -static-libgcc
     -static-libstdc++
     -static
@@ -86,7 +90,7 @@ elseif (WIN32)
   file(COPY ${CMAKE_SOURCE_DIR}/bin/ DESTINATION ${CMAKE_BINARY_DIR})
 
 elseif(EMSCRIPTEN)
-  target_link_libraries(index
+  target_link_libraries(${PROJECT_NAME}
     "${PROJECT_SOURCE_DIR}/lib/emscripten/charlie2D/libcharlie2D.a"
   )
 
