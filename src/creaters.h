@@ -9,4 +9,5 @@
 
 #pragma once
 #include "config.h"
+#include "Charlie2D.hpp"
 #include "components.h"

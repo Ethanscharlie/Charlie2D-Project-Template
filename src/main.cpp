@@ -1,4 +1,4 @@
-#include "Charlie2D.h"
+#include "Charlie2D.hpp"
 #include <iostream>
 
 #include "config.h"
