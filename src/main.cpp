@@ -2,8 +2,6 @@
 #include <iostream>
 
 #include "config.h"
-#include "components.h"
-#include "creaters.h"
 
 /*
  * Some useful code snips
