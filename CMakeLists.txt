@@ -45,37 +45,52 @@ elseif (WIN32)
   set(CH2D_LIB_PATH "${PROJECT_SOURCE_DIR}/lib/windows/charlie2D")
 endif()
 
-set (SDL2_ "${SDL_LIB_PATH}/libSDL2.so")
-set (SDL2_MAIN "${SDL_LIB_PATH}/libSDL2main.a")
-set (SDL2_TTF "${SDL_LIB_PATH}/libSDL2_ttf.so")
-set (SDL2_IMAGE "${SDL_LIB_PATH}/libSDL2_image.so")
-set (SDL2_MIXER "${SDL_LIB_PATH}/libSDL2_mixer.so")
-set (SDL2_GFX "${SDL_LIB_PATH}/libSDL2_gfx.so")
-set (LIB_JXL "${SDL_LIB_PATH}/libjxl.so.0.10")
-
-set (CHARLIE2D "${CH2D_LIB_PATH}/libcharlie2D.so")
-
 if (LINUX)
+  # set(SDL2_ "${SDL_LIB_PATH}/libSDL2.so")
+  # set(SDL2_ "${SDL_LIB_PATH}/libSDL2main.a")
+  # set(SDL2_GFX "${SDL_LIB_PATH}/libSDL2_gfx-1.0.so.0")
+  # set(SDL2_IMAGE "${SDL_LIB_PATH}/libSDL2_image-2.0.so.0")
+  # set(SDL2_TTF "${SDL_LIB_PATH}/libSDL2_ttf-2.0.so.0")
+  # set(SDL2_MIXER "${SDL_LIB_PATH}/libSDL2_mixer-2.0.so.0")
+  # # set(LIB_JXL "${SDL_LIB_PATH}/libjxl.so.0.10")
+  set(CHARLIE2D "${CH2D_LIB_PATH}/libcharlie2D.so")
+
+  find_library(SDL2_      SDL2       PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_MAIN  SDL2main   PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_TTF   SDL2_ttf   PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_IMAGE SDL2_image PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_MIXER SDL2_mixer PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_GFX SDL2_gfx PATHS ${SDL_LIB_PATH})
+
   target_link_libraries(${PROJECT_NAME}
-    ${SDL2_MAIN}
-    ${SDL2_}
-    ${SDL2_TTF}
+    ${SDL2_MAIN} 
+    ${SDL2_} 
+    ${SDL2_GFX} 
+    ${SDL2_TTF} 
     ${SDL2_IMAGE}
-    ${SDL2_MIXER}
-    ${SDL2_GFX}
-    ${LIB_JXL}
-    ${CHARLIE2D}
+    ${SDL2_mixer}
+    ${CHARLIE2D}   
   )
 
   file(COPY ${SDL2_MAIN} DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY ${SDL2_} DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY ${SDL2_TTF} DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY ${SDL2_MIXER} DESTINATION ${CMAKE_BINARY_DIR})
+  file(COPY ${LIB_JXL} DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY ${SDL2_IMAGE} DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY ${SDL2_GFX} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${LIB_JXL} DESTINATION ${CMAKE_BINARY_DIR})
   file(COPY ${CHARLIE2D} DESTINATION ${CMAKE_BINARY_DIR})
 
 elseif (WIN32)
+  find_library(SDL2_      SDL2       PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_MAIN  SDL2main   PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_TTF   SDL2_ttf   PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_IMAGE SDL2_image PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_MIXER SDL2_mixer PATHS ${SDL_LIB_PATH})
+  find_library(SDL2_GFX SDL2_gfx PATHS ${SDL_LIB_PATH})
+  
+  find_library(CHARLIE2D charlie2D PATHS ${CH2D_LIB_PATH})
+
   target_link_libraries(${PROJECT_NAME}
     -static-libgcc
     -static-libstdc++
@@ -116,6 +131,36 @@ endif()
 
 # copy image directory to build directory
 file(COPY ${CMAKE_SOURCE_DIR}/res DESTINATION ${CMAKE_BINARY_DIR})
+
+if (LINUX)
+  # file(GLOB_RECURSE RES_FILES "${CMAKE_SOURCE_DIR}/res/*")
+  # message(${RES_FILES})
+
+  # file(GLOB_RECURSE RES_FILES "${CMAKE_SOURCE_DIR}/res/*")
+  # foreach(RES_FILE IN LISTS RES_FILES)
+  #   string(REPLACE "${CMAKE_SOURCE_DIR}/" "" RES_FILE_RELATIVE "${RES_FILE}")
+  #   list(APPEND RELATIVE_RES_FILES "${RES_FILE_RELATIVE};")
+  # endforeach()
+
+  set(APPDIR "${CMAKE_BINARY_DIR}/AppDir")
+  file(REMOVE_RECURSE "${APPDIR}")       # remove if leftover
+  file(MAKE_DIRECTORY "${APPDIR}")
+  file(COPY ${CMAKE_SOURCE_DIR}/res DESTINATION "${CMAKE_BINARY_DIR}/AppDir")
+
+  INSTALL(CODE 
+    "include(../appimage.cmake)
+    make_appimage(
+      EXE \"${CMAKE_BINARY_DIR}/${PROJECT_NAME}\"
+      NAME \"${PROJECT_NAME}\"
+      ICON \"${CMAKE_SOURCE_DIR}/bitmap.svg\"
+      DIR_ICON \"${CMAKE_SOURCE_DIR}/icon.png\"
+      OUTPUT_NAME \"${CMAKE_BINARY_DIR}/${PROJECT_NAME}.AppImage\"
+      # ASSETS ${RELATIVE_RES_FILES}
+    )
+  	" 
+  	COMPONENT Runtime
+  )
+endif()
 
 # set output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
