@@ -55,12 +55,19 @@ if (LINUX)
   # # set(LIB_JXL "${SDL_LIB_PATH}/libjxl.so.0.10")
   set(CHARLIE2D "${CH2D_LIB_PATH}/libcharlie2D.so")
 
-  find_library(SDL2_      SDL2       PATHS ${SDL_LIB_PATH})
-  find_library(SDL2_MAIN  SDL2main   PATHS ${SDL_LIB_PATH})
-  find_library(SDL2_TTF   SDL2_ttf   PATHS ${SDL_LIB_PATH})
-  find_library(SDL2_IMAGE SDL2_image PATHS ${SDL_LIB_PATH})
-  find_library(SDL2_MIXER SDL2_mixer PATHS ${SDL_LIB_PATH})
-  find_library(SDL2_GFX SDL2_gfx PATHS ${SDL_LIB_PATH})
+  find_library(LINK_SDL2_      SDL2       PATHS ${SDL_LIB_PATH})
+  find_library(LINK_SDL2_MAIN  SDL2main   PATHS ${SDL_LIB_PATH})
+  find_library(LINK_SDL2_TTF   SDL2_ttf   PATHS ${SDL_LIB_PATH})
+  find_library(LINK_SDL2_IMAGE SDL2_image PATHS ${SDL_LIB_PATH})
+  find_library(LINK_SDL2_MIXER SDL2_mixer PATHS ${SDL_LIB_PATH})
+  find_library(LINK_SDL2_GFX SDL2_gfx PATHS ${SDL_LIB_PATH})
+
+  get_filename_component(SDL2_ ${LINK_SDL2_} REALPATH)
+  get_filename_component(SDL2_MAIN ${LINK_SDL2_MAIN} REALPATH)
+  get_filename_component(SDL2_GFX ${LINK_SDL2_GFX} REALPATH)
+  get_filename_component(SDL2_TTF ${LINK_SDL2_TTF} REALPATH)
+  get_filename_component(SDL2_IMAGE ${LINK_SDL2_IMAGE} REALPATH)
+  get_filename_component(SDL2_MIXER ${LINK_SDL2_MIXER} REALPATH)
 
   target_link_libraries(${PROJECT_NAME}
     ${SDL2_MAIN} 
@@ -72,14 +79,32 @@ if (LINUX)
     ${CHARLIE2D}   
   )
 
-  file(COPY ${SDL2_MAIN} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${SDL2_} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${SDL2_TTF} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${SDL2_MIXER} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${LIB_JXL} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${SDL2_IMAGE} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${SDL2_GFX} DESTINATION ${CMAKE_BINARY_DIR})
-  file(COPY ${CHARLIE2D} DESTINATION ${CMAKE_BINARY_DIR})
+  set(LIBRARY_OUTPUT_PATH "${CMAKE_BINARY_DIR}/AppDir/lib")
+
+  # execute_process(
+  #   COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}  
+  #   COMMAND /bin/sh ${PROJECT_SOURCE_DIR}/gather_linux_depends.sh ${CHARLIE2D} ${LIBRARY_OUTPUT_PATH}
+  # )
+
+
+  # file(COPY ${SDL2_MAIN} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${SDL2_} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${SDL2_TTF} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${SDL2_MIXER} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${LIB_JXL} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${SDL2_IMAGE} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${SDL2_GFX} DESTINATION ${CMAKE_BINARY_DIR})
+  # file(COPY ${CHARLIE2D} DESTINATION ${CMAKE_BINARY_DIR})
+
+
+  add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${LIBRARY_OUTPUT_PATH}  
+    COMMAND /bin/sh ${PROJECT_SOURCE_DIR}/gather_linux_depends.sh ${PROJECT_NAME} ${LIBRARY_OUTPUT_PATH}
+    COMMENT "Copying shared libraries to build folder"
+  )
+
+
+  set_target_properties(${PROJECT_NAME} PROPERTIES BUILD_RPATH $ORIGIN/lib)
 
 elseif (WIN32)
   find_library(SDL2_      SDL2       PATHS ${SDL_LIB_PATH})

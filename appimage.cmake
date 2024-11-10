@@ -35,6 +35,7 @@ function(make_appimage)
 file(WRITE "${APPDIR}/AppRun" 
 "#!/bin/sh
 cd \"$(dirname \"$0\")\";
+export LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH:./lib\"
 ./${EXE_NAME} $@"
     )
     execute_process(COMMAND chmod +x "${APPDIR}/AppRun")
