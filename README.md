@@ -1,14 +1,10 @@
 # Charlie2D-Project-Template
 The official Charlie2D Project Template
 
-#### Clone Command:
-```
-git clone https://github.com/Ethanscharlie/Charlie2D-Project-Template.git GAMENAMEHERE; cd "$(basename "$_" .git)"
-```
-
 # Compile Instructions
 ## Linux
-Install cmake
+Install cmake, sdl2, sdl2_ttf, sdl2_mixer, sdl2_gfx, sdl2_image
+Note: When you distriute your game the users will also have to install those packages (besides cmake of course), I recomend you don't distribute linux builds for this reason
 
 Compile
 ```
